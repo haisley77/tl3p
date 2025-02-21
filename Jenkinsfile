@@ -8,7 +8,15 @@ pipeline {
                 echo 'hook checked ...'
             }
         }
+    }
 
+    post {
+        success {
+            githubCommitStatus(name: 'prStatus', state: 'success', description: 'SUCCESS')
+        }
+        failure {
+            githubCommitStatus(name: 'prStatus', state: 'failure', description: 'FAIL')
+        }
     }
 
 }
