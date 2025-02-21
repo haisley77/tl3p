@@ -55,7 +55,7 @@ public class ReviewController {
         return ResponseEntity.ok(
                 SuccessResponseDto.builder()
                         .code(ResponseCode.NS)
-                        .message("리뷰 검색 성공")
+                        .message("리뷰 검색에 성공했습니다.")
                         .data(responseDtos)
                         .build()
         );
