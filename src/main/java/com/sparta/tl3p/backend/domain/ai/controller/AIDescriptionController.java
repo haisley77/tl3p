@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class AIDescriptionController {
 
+
+
+
+
     private final AIDescriptionService aiDescriptionService;
 
     @PostMapping("/items/ai-description")
