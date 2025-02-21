@@ -8,14 +8,21 @@ pipeline {
                 echo 'hook checked ...'
             }
         }
+
+        stage('Git clone') {
+            steps {
+                git branch: 'develop', credentialsId: 'github_token',
+                url: 'https://github.com/haisley77/tl1p.git'
+            }
+        }
     }
 
     post {
         success {
-            githubCommitStatus(name: 'prStatus', state: 'success', description: 'SUCCESS')
+            githubPRStatusPublisher statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'SUCCESS'
         }
         failure {
-            githubCommitStatus(name: 'prStatus', state: 'failure', description: 'FAIL')
+            githubPRStatusPublisher statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'FAILURE'
         }
     }
 
