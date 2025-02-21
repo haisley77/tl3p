@@ -17,13 +17,4 @@ pipeline {
         }
     }
 
-    post {
-        success {
-            githubPRStatusPublisher statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'SUCCESS'
-        }
-        failure {
-            githubPRStatusPublisher statusMsg: githubPRMessage('${GITHUB_PR_COND_REF} run ended'), unstableAs: 'FAILURE'
-        }
-    }
-
 }
