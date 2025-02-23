@@ -33,7 +33,7 @@ pipeline {
                 script {
                     checkout([
                         $class: 'GitSCM',
-                        branches: [[name: "origin/$env.GITHUB_BRANCH"]],
+                        branches: [[name: "origin/develop"]],
                         doGenerateSubmoduleConfigurations: false,
                         extensions: [[$class: 'PreBuildMerge', options: [mergeRemote: 'origin', mergeTarget: '$githubTargetBranch']]],
                         submoduleCfg: [],
