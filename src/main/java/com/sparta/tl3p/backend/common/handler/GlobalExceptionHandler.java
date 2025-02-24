@@ -19,6 +19,9 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+
+
+
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorResponseDto> methodArgumentNotValidExceptionHandler(HttpServletRequest request) {
         printException(request, ErrorCode.ARGUMENT_NOT_VALID);
