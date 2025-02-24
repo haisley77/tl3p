@@ -1,7 +1,6 @@
 package com.sparta.tl3p.backend.common.type;
 
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
@@ -12,6 +11,7 @@ public enum ErrorCode {
     USERNAME_DUPLICATE("M-004", "Username already exists"),
     PASSWORD_MISMATCH("M-005", "비밀번호가 일치하지 않습니다"),
     INVALID_JWT_TOKEN("M-006", "유효하지 않은 JWT 토큰입니다."),
+    INVALID_MEMBER("M-007", "Invalid Member Request"),
 
     // Store
     STORE_NOT_FOUND("S-001", "Store Not Found"),

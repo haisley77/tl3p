@@ -4,6 +4,7 @@ import com.sparta.tl3p.backend.common.exception.BusinessException;
 import com.sparta.tl3p.backend.common.type.Address;
 import com.sparta.tl3p.backend.common.type.ErrorCode;
 import com.sparta.tl3p.backend.domain.member.entity.Member;
+import com.sparta.tl3p.backend.domain.member.repository.MemberRepository;
 import com.sparta.tl3p.backend.domain.order.entity.Order;
 import com.sparta.tl3p.backend.domain.order.repository.OrderRepository;
 import com.sparta.tl3p.backend.domain.review.dto.ReviewResponseDto;
@@ -37,6 +38,9 @@ class ReviewServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
+
+    @Mock
+    private MemberRepository memberRepository;
 
     private UUID reviewId;
     private Long memberId;
@@ -174,13 +178,14 @@ class ReviewServiceTest {
     @DisplayName("리뷰 수정 테스트")
     void updateReviewTest_success() {
         // given
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
         assertThat(review.getStatus()).isEqualTo(ReviewStatus.CREATED);
         assertThat(review.getContent()).isEqualTo("created review");
         assertThat(review.getScore()).isEqualTo(4.5);
 
         // when
-        reviewService.updateReview(reviewId, "updated review", 4.3);
+        reviewService.updateReview(reviewId, "updated review", 4.3, memberId);
         Review updatedReview = reviewRepository.findById(reviewId).get();
 
         // then
@@ -193,11 +198,12 @@ class ReviewServiceTest {
     @DisplayName("리뷰 수정 예외 테스트")
     void updateReviewTest_reviewNotFound() {
         // given
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.empty());
 
         // when & then
         BusinessException exception = assertThrows(BusinessException.class,
-                () -> reviewService.updateReview(reviewId, "updated review", 4.3));
+                () -> reviewService.updateReview(reviewId, "updated review", 4.3, memberId));
 
         assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.REVIEW_NOT_FOUND);
     }
@@ -206,10 +212,11 @@ class ReviewServiceTest {
     @DisplayName("리뷰 숨김 테스트")
     void hideReviewTest_success() {
         // given
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
 
         // when
-        reviewService.hideReview(reviewId);
+        reviewService.hideReview(reviewId, memberId);
 
         // then
         assertThat(review.getStatus()).isEqualTo(ReviewStatus.DELETED);
@@ -223,7 +230,7 @@ class ReviewServiceTest {
 
         // when & then
         BusinessException exception = assertThrows(BusinessException.class,
-                () -> reviewService.hideReview(reviewId));
+                () -> reviewService.hideReview(reviewId,memberId));
 
         assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.REVIEW_NOT_FOUND);
     }
@@ -235,7 +242,7 @@ class ReviewServiceTest {
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
 
         // when
-        reviewService.deleteReview(reviewId);
+        reviewService.deleteReview(reviewId,memberId);
 
         // then
         verify(reviewRepository, times(1)).delete(review);
@@ -249,7 +256,7 @@ class ReviewServiceTest {
 
         // when & then
         BusinessException exception = assertThrows(BusinessException.class,
-                () -> reviewService.deleteReview(reviewId));
+                () -> reviewService.deleteReview(reviewId,memberId));
 
         assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.REVIEW_NOT_FOUND);
     }

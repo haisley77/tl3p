@@ -2,10 +2,13 @@ package com.sparta.tl3p.backend.domain.review.controller;
 
 import com.sparta.tl3p.backend.common.dto.SuccessResponseDto;
 import com.sparta.tl3p.backend.common.type.ResponseCode;
+import com.sparta.tl3p.backend.domain.member.entity.CustomUserDetails;
 import com.sparta.tl3p.backend.domain.review.dto.ReviewResponseDto;
 import com.sparta.tl3p.backend.domain.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,11 +24,11 @@ public class ReviewOwnerController {
     private final ReviewService reviewService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<SuccessResponseDto> searchOwnerReviews(
-            @RequestParam(required = false, defaultValue = "") UUID storeId) {
-
-        // todo: memberId 값에 UserDetails 값 넣어 주기
-        List<ReviewResponseDto> responseDtos = reviewService.searchOwnerReviews(storeId,1L);
+            @RequestParam(required = false) UUID storeId,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        List<ReviewResponseDto> responseDtos = reviewService.searchOwnerReviews(storeId,userDetails.getMemberId());
         return ResponseEntity.ok(SuccessResponseDto
                 .builder()
                 .code(ResponseCode.NS)
