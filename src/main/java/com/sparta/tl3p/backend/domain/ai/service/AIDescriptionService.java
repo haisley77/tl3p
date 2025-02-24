@@ -64,8 +64,8 @@ public class AIDescriptionService {
     }
 
     private String callAIApi(String prompt) {
-        URI url = UriComponentsBuilder.fromUriString(GEMINI_API_KEY)
-                .queryParam("key", GEMINI_API_URL)
+        URI url = UriComponentsBuilder.fromUriString(GEMINI_API_URL)
+                .queryParam("key", GEMINI_API_KEY )
                 .build()
                 .toUri();
 
