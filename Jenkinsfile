@@ -51,7 +51,7 @@ pipeline {
 
                 withCredentials([file(credentialsId: 'log', variable: 'logFile')]) {
                     script {
-                        sh 'cp $logFile src/resources/logback-spring.xml'
+                        sh 'cp $logFile src/main/resources/logback-spring.xml'
                     }
                 }
 
