@@ -56,3 +56,6 @@ lerna-debug.log*
 
 ### .sql ###
 *.sql
+
+### logback-spring.xml ###
+src/main/resources/**/*.xml

@@ -49,6 +49,12 @@ pipeline {
                         sh "chmod -R 755 src/main/resources"
                 }
 
+                withCredentials([file(credentialsId: 'log', variable: 'logFile')]) {
+                    script {
+                        sh 'cp $logFile src/resources/logback-spring.xml'
+                    }
+                }
+
 
                 withCredentials([file(credentialsId: 'db', variable: 'dbFile')]) {
                     script {
